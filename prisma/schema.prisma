@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Brand {
+  id        String   @id @default(uuid())
+  name      String
+  country   String?
+  website   String?
+  createdAt DateTime @default(now()) @map("created_at")
+  lures     Lure[]
+
+  @@map("brands")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  lures       Lure[]
+
+  @@map("categories")
+}
+
+model Lure {
+  id           String        @id @default(uuid())
+  name         String
+  brandId      String        @map("brand_id")
+  categoryId   String        @map("category_id")
+  lengthMm     Int?          @map("length_mm")
+  weightG      Decimal?      @map("weight_g") @db.Decimal(10, 2)
+  color        String?
+  price        Int?
+  purchaseDate DateTime?     @map("purchase_date") @db.Date
+  shop         String?
+  condition    Condition     @default(NEW)
+  imageUrl     String?       @map("image_url")
+  notes        String?       @db.Text
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  brand        Brand         @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  category     Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  catchRecords CatchRecord[]
+
+  @@map("lures")
+}
+
+model CatchRecord {
+  id          String   @id @default(uuid())
+  lureId      String   @map("lure_id")
+  fishSpecies String   @map("fish_species")
+  fishSizeCm  Int?     @map("fish_size_cm")
+  location    String?
+  date        DateTime @db.Date
+  weather     String?
+  waterTemp   Int?     @map("water_temp")
+  notes       String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  lure        Lure     @relation(fields: [lureId], references: [id], onDelete: Cascade)
+
+  @@map("catch_records")
+}
+
+enum Condition {
+  NEW
+  USED
+  DAMAGED
+}
