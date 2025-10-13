@@ -10,19 +10,16 @@
 
 ### 主要エンティティ
 1. **ルアー** - メインデータ
-2. **ブランド** - ルアーメーカー
-3. **カテゴリ** - ルアータイプ（ミノー、スプーンなど）
-4. **釣果記録** - いつ、どこで、何が釣れたか
+2. **釣果記録** - いつ、どこで、何が釣れたか
 
 ### 基本情報項目
 - ルアー名
-- ブランド
-- カテゴリ（ミノー、スプーン、バイブレーション等）
+- ブランド（テキスト入力）
+- カテゴリ（テキスト入力）
 - サイズ（長さ・重量）
 - カラー
 - 価格
 - 購入日
-- 購入店舗
 - 状態（新品、使用済み、破損等）
 - 画像
 - メモ
@@ -35,14 +32,13 @@
 ```sql
 - id (UUID, Primary Key)
 - name (VARCHAR, ルアー名)
-- brand_id (UUID, Foreign Key)
-- category_id (UUID, Foreign Key)
+- brand (VARCHAR, ブランド名)
+- category (VARCHAR, カテゴリ名)
 - length_mm (INTEGER, 長さ)
 - weight_g (DECIMAL, 重量)
 - color (VARCHAR, カラー)
 - price (INTEGER, 価格（セント単位）)
 - purchase_date (DATE, 購入日)
-- shop (VARCHAR, 購入店舗)
 - condition (ENUM: 'new', 'used', 'damaged')
 - image_url (VARCHAR, 画像URL)
 - notes (TEXT, メモ)
@@ -50,24 +46,7 @@
 - updated_at (TIMESTAMP)
 ```
 
-#### 2. brands（ブランドテーブル）
-```sql
-- id (UUID, Primary Key)
-- name (VARCHAR, ブランド名)
-- country (VARCHAR, 国)
-- website (VARCHAR, ウェブサイト)
-- created_at (TIMESTAMP)
-```
-
-#### 3. categories（カテゴリテーブル）
-```sql
-- id (UUID, Primary Key)
-- name (VARCHAR, カテゴリ名)
-- description (TEXT, 説明)
-- created_at (TIMESTAMP)
-```
-
-#### 4. catch_records（釣果記録テーブル）
+#### 2. catch_records（釣果記録テーブル）
 ```sql
 - id (UUID, Primary Key)
 - lure_id (UUID, Foreign Key)
@@ -87,7 +66,6 @@
 1. **ダッシュボード** (`/dashboard`)
    - ルアー総数、最近追加したルアー、釣果統計
    - 最近の釣果記録（直近5件）
-   - ブランド別・カテゴリ別の円グラフ
 
 2. **ルアー一覧** (`/lures`)
    - 検索・フィルタ機能
@@ -108,9 +86,6 @@
    - 釣果一覧・登録・編集
    - ルアー選択機能
 
-6. **ブランド・カテゴリ管理** (`/brands`, `/categories`)
-   - 一覧・追加・編集・削除
-
 ### レイアウト構成
 - サイドナビゲーション（チュートリアルと同様）
 - レスポンシブデザイン
@@ -125,22 +100,13 @@
    - 画像アップロード・表示
    - 検索・フィルタリング・ソート
 
-2. **ブランド管理**
-   - CRUD操作
-   - ルアーとのリレーション
-
-3. **カテゴリ管理**
-   - CRUD操作
-   - ルアーとのリレーション
-
-4. **釣果記録管理**
+2. **釣果記録管理**
    - CRUD操作
    - ルアーとの紐づけ
 
 ### 高度な機能
 1. **ダッシュボード**
    - 統計情報の可視化
-   - チャート表示（ブランド別、カテゴリ別）
    - 最近の活動表示
 
 2. **検索・フィルタ**
