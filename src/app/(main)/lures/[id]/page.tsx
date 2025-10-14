@@ -3,13 +3,11 @@ import Link from "next/link";
 export default function LureDetailPage({ params }: { params: { id: string } }) {
   return (
     <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">ルアー詳細</h1>
+      <div className="flex justify-end items-center mb-6">
         <div className="flex gap-2">
           <Link
             href={`/lures/${params.id}/edit`}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
             編集
           </Link>
           <button className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
